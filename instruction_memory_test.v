@@ -9,11 +9,11 @@ module InstructionMemoryTest;
   initial begin
     $dumpfile("InstructionMemoryTest.vcd");
     $dumpvars(0, InstructionMemoryTest);
-
+     
     forever begin
       #10;
       address = address + 1;
-      if(address == 12'b000000001010) $stop;
+      if(address == 12'b000000001111) $stop;
     end
   end
   
