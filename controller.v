@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-module MIPSController(input zero, carry, clk, input[18:0] instruction, output reg reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_read_write, stack_push, stack_pop, output reg [1:0] pc_src, output reg [1:0] scode, output reg [2:0] acode);
+module Controller(input zero, carry, clk, input[18:0] instruction, output reg reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_read_write, stack_push, stack_pop, output reg [1:0] pc_src, output reg [1:0] scode, output reg [2:0] acode);
 
   always @(posedge clk) begin
     reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
