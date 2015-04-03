@@ -1,6 +1,6 @@
 // take care of reg and wire, specially zero and carry and carry_out
 `timescale 1ns/1ns
-module MIPSDataPath(input reg2_read_source, branch, mem_read_write, mem_or_alu, is_shift, alu_src, reg_read_write, stack_push, stack_pop, clk, input [1:0] pc_src, input [1:0] scode, input [2:0] acode, output zero, stack_overflow, output reg carry, output [18:0] instruction);
+module MIPSDataPath(input reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_read_write, stack_push, stack_pop, clk, input [1:0] pc_src, input [1:0] scode, input [2:0] acode, output zero, stack_overflow, output reg carry, output [18:0] instruction);
 
   reg[11:0] pc = 12'b0;
   wire[7:0] reg_out_1, reg_out_2;
