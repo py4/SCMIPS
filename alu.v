@@ -3,7 +3,7 @@
 
 `timescale 1ns/1ns
 
-module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift, input [1:0] scode, input [2:0] acode, output reg [7:0] R, output zero, output reg carry_out);
+module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift, input [1:0] scode, input [2:0] acode, output reg [7:0] R, output reg zero, carry_out);
 
   reg [8:0] temp;
   reg [15:0] temp2;
@@ -40,8 +40,6 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
             end
           endcase
     endcase
+    zero = (R == 8'b0);
   end
-
-  assign zero = (R == 8'b0);
-
 endmodule
