@@ -6,6 +6,10 @@ module CPUTest;
 
   MIPSCPU cpu(clk, rst, zero, carry, stack_overflow);
 
+//  initial begin
+//    clk = 1;
+//  end
+
   always begin
     #20 clk = ~clk;
     if(clk == 1) begin

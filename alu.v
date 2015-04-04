@@ -15,13 +15,13 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
     carry_out = 0;
   end
   always @(A, B, scode, acode) begin
-    $display("############# ALU ##############");
-      $display("A:  %b", A);
+    //$display("############# ALU ##############");
+    //  $display("A:  %b", A);
 
 //    $display("B:  %b", B);
 //    $display("scode:  %b", scode);
 //    $display("acode:  %b", acode);
-    $display("################################");
+    //$display("################################");
     case(is_shift)
       1'b0: begin
         case(acode)

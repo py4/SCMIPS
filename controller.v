@@ -7,9 +7,10 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
   end
 
   always @(posedge clk) begin
+    #1;
     reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
     alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
-
+    $display(">>> alu src:  %d", alu_src);
     $display(">>> current instruction: %b", instruction);
     if(instruction == 19'b1111111111111111111) begin
       $finish;
@@ -17,7 +18,9 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
 
     if(instruction[18:17] == 2'b00) begin
       $display(">>> normal R type!");
+      $display(">>> alu src:  %d", alu_src);
       acode = instruction[16:14];
+      alu_src = 0;
       mem_or_alu = 1;
       reg_write_signal = 1;
     end
@@ -26,7 +29,7 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
       $display(">>> immediate R type!");
       acode = instruction[16:14];
       alu_src = 1;
-      mem_or_alu = 1;
+      mem_or_alu = 1; //CHANGED
       reg_write_signal = 1;
     end
 
@@ -43,7 +46,7 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
       reg2_read_source = 1;
       mem_or_alu = 0;
       alu_src = 1;
-      if(instruction[15:14] == 2'b0) begin //load
+      if(instruction[15:14] == 2'b00) begin //load
         mem_read_write = 0;
         reg_write_signal = 1;
       end else if(instruction[15:14] == 2'b01) begin // store
