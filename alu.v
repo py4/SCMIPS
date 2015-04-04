@@ -1,6 +1,7 @@
 //MASK operation is still left
 // in datapath: take care of extending shift value as B input
 // in zero shift: what will be carry out?
+// we do sign extend in shifting. is it correct?
 
 `timescale 1ns/1ns
 
@@ -40,7 +41,7 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
             2'b10: begin
               temp2 = {A,A} << (B);
               R = temp2[15:8];
-              carry_out = A[8-B];
+              carry_out = A[7-B];
             end
             2'b11: begin
               temp2 = {A,A} >> (B);

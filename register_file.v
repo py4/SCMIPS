@@ -9,6 +9,7 @@ module RegisterFile(input[2:0] reg_read_1, input [2:0] reg_read_2, input [2:0] r
     end else if(clk) begin
       registers[reg_write] = in_data;
     end
+    registers[0] = 0; //$R0
   end
   
 endmodule
