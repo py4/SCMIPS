@@ -23,15 +23,15 @@ module DataPath(input reg2_read_source, mem_read_write, mem_or_alu, is_shift, al
     $display("");
 
     carry = alu_carry_out;
-    if(start_loading_pc)
+    //if(start_loading_pc)
       case(pc_src)
         2'b00: pc = pc + 1;
         2'b01: pc = instruction[11:0];
         2'b10: pc = stack_out;
         2'b11: pc = pc + 1 + {{4{instruction[7]}},instruction[7:0]};
       endcase
-    else
-      start_loading_pc = 1;
+    //else
+    //  start_loading_pc = 1;
   end
 
   always @(reg_out_1) begin

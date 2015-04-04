@@ -6,14 +6,14 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
     alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
   end
 
-  always @(posedge clk) begin
-    #1;
+  always @(posedge clk, instruction) begin
+    //#1;
     reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
     alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
     $display(">>> alu src:  %d", alu_src);
     $display(">>> current instruction: %b", instruction);
     if(instruction == 19'b1111111111111111111) begin
-      $finish;
+      #5 $finish;
     end
 
     if(instruction[18:17] == 2'b00) begin
