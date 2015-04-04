@@ -1,5 +1,9 @@
 `timescale 1ns/1ns
 module Stack(input push_sig, pop_sig, clk, input[11:0] push_data, output reg overflow, output reg [11:0] pop_data);
+  
+  initial begin
+    overflow = 0;
+  end
 
   reg[11:0] data[7:0];
   reg[3:0] stack_pointer = 4'b0;

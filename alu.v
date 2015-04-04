@@ -10,7 +10,18 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
   reg [8:0] temp;
   reg [15:0] temp2;
 
+  initial begin
+    zero = 0;
+    carry_out = 0;
+  end
   always @(A, B, scode, acode) begin
+    $display("############# ALU ##############");
+      $display("A:  %b", A);
+
+//    $display("B:  %b", B);
+//    $display("scode:  %b", scode);
+//    $display("acode:  %b", acode);
+    $display("################################");
     case(is_shift)
       1'b0: begin
         case(acode)
@@ -52,5 +63,6 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
         end
     endcase
     zero = (R == 8'b0);
+  //  $display("*****  [alu]   R :   %b", R);
   end
 endmodule

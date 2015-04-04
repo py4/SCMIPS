@@ -13,7 +13,7 @@ module InstructionMemoryTest;
     forever begin
       #10;
       address = address + 1;
-      if(address == 12'b000000001111) $stop;
+      if(address == 12'b000000001111) $finish;
     end
   end
   

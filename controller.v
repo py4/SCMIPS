@@ -1,44 +1,58 @@
 `timescale 1ns/1ns
-module Controller(input zero, carry, clk, input[18:0] instruction, output reg reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_read_write, stack_push, stack_pop, output reg [1:0] pc_src, output reg [1:0] scode, output reg [2:0] acode);
+module Controller(input zero, carry, clk, input[18:0] instruction, output reg reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_write_signal, stack_push, stack_pop, output reg [1:0] pc_src, output reg [1:0] scode, output reg [2:0] acode);
+  
+  initial begin
+    reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
+    alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
+  end
 
   always @(posedge clk) begin
     reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
-    alu_src = 0; reg_read_write = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
+    alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
+
+    $display(">>> current instruction: %b", instruction);
+    if(instruction == 19'b1111111111111111111) begin
+      $finish;
+    end
 
     if(instruction[18:17] == 2'b00) begin
+      $display(">>> normal R type!");
       acode = instruction[16:14];
       mem_or_alu = 1;
-      reg_read_write = 1;
+      reg_write_signal = 1;
     end
     
     if(instruction[18:17] == 2'b01) begin
+      $display(">>> immediate R type!");
       acode = instruction[16:14];
       alu_src = 1;
       mem_or_alu = 1;
-      reg_read_write = 1;
+      reg_write_signal = 1;
     end
 
     if(instruction[18:16] == 3'b110) begin
+      $display(">>> shifting");
       scode = instruction[15:14];
       is_shift = 1;
       mem_or_alu = 1;
-      reg_read_write = 1;
+      reg_write_signal = 1;
     end
 
     if(instruction[18:16] == 3'b100) begin
+      $display(">>> memory");
       reg2_read_source = 1;
       mem_or_alu = 0;
       alu_src = 1;
       if(instruction[15:14] == 2'b0) begin //load
         mem_read_write = 0;
-        reg_read_write = 1;
+        reg_write_signal = 1;
       end else if(instruction[15:14] == 2'b01) begin // store
         mem_read_write = 1;
-        reg_read_write = 0;
       end
     end
 
     if(instruction[18:16] == 3'b101) begin
+      $display(">>> beq");
       case(instruction[15:14])
         2'b00: pc_src = zero == 1 ? 2'b1 : 2'b0;
         2'b01: pc_src = zero == 0 ? 2'b1 : 2'b0;
@@ -48,11 +62,13 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
     end
 
     if(instruction[18:15] == 4'b1110) begin // jump without condition
+      $display(">>> jump without condition!");
       pc_src = 2'b01; //jmp
       if(instruction[14] == 1) stack_push = 1; // jsb
     end
 
     if(instruction[18:13] == 6'b111100) begin // ret
+      $display(">>> RET!");
       pc_src = 2'b10;
       stack_pop = 1;
     end
