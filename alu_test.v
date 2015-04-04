@@ -4,7 +4,7 @@ module ALUTest;
   
   reg signed [7:0] A = 8'b11100101;
   reg [7:0] B = 8'b00000111;
-  reg carry_in = 1, is_shift = 0, clk = 0;
+  reg carry_in = 1, is_shift = 1, clk = 0;
   reg[1:0] scode = 2'b00;
   reg[2:0] acode = 3'b000;
 
@@ -12,7 +12,7 @@ module ALUTest;
   wire[7:0] R;
 
   
-  initial begin
+  /* initial begin
     B = 8'b11000111;
     $dumpfile("ALUTest.vcd");
     $dumpvars(0, ALUTest);
@@ -23,14 +23,27 @@ module ALUTest;
       end
       acode = acode + 1;
     end
+  end */
+
+   initial begin
+    B = 8'b00000110;
+    $dumpfile("ALUTest.vcd");
+    $dumpvars(0, ALUTest);
+    forever begin
+      #10 clk = ~clk;
+      if(scode == 2'b11) begin
+        #5 $finish;
+      end
+      scode = scode + 1;
+    end
   end
 
   ALU alu(A, B, carry_in, is_shift, scode, acode, R, zero, carry_out);
 
-  always @(A, B, carry_in, acode, R, zero, carry_out) begin
+  always @(A, B, carry_in, scode, R, zero, carry_out) begin
     $display("");
       $display("A:  %b , B:  %b", A , B);
-      $display("acode:  %b", acode);
+      $display("scode:  %b", scode);
       $display("R:  %b", R);
       $display("zero:  %b, carry_out:  %b", zero, carry_out);
     $display("");

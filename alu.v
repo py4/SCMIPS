@@ -1,5 +1,6 @@
 //MASK operation is still left
 // in datapath: take care of extending shift value as B input
+// in zero shift: what will be carry out?
 
 `timescale 1ns/1ns
 
@@ -8,7 +9,7 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
   reg [8:0] temp;
   reg [15:0] temp2;
 
-  always @(A, B, acode) begin
+  always @(A, B, scode, acode) begin
     case(is_shift)
       1'b0: begin
         case(acode)
@@ -26,19 +27,28 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
       1'b1: 
         if(B == 8'b0)
           R = A;
-        else
+        else begin
           case(scode)
-            2'b00: R = A <<< B;
-            2'b01: R = A >>> B;
+            2'b00: begin
+              carry_out = A[8-B];
+              R = A <<< B;
+            end
+            2'b01: begin
+              carry_out = A[B-1];
+              R = A >>> B;
+            end
             2'b10: begin
-              temp2 = {A,A} << (8 - B);
+              temp2 = {A,A} << (B);
               R = temp2[15:8];
+              carry_out = A[8-B];
             end
             2'b11: begin
-              temp2 = {A,A} >> (8 - B);
+              temp2 = {A,A} >> (B);
               R = temp2[7:0];
+              carry_out = A[B-1];
             end
           endcase
+        end
     endcase
     zero = (R == 8'b0);
   end
