@@ -8,7 +8,8 @@
 module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift, input [1:0] scode, input [2:0] acode, output reg [7:0] R, output reg zero, carry_out);
 
   function get_carry_out; input [7:0] A, B, C;
-    get_carry_out = (~(C[7]))&(A[7]^B[7]) | A[7]&B[7]&C[7];
+    //get_carry_out = (~(C[7]))&(A[7]^B[7]) | A[7]&B[7]&C[7];
+    get_carry_out = (A[7]&B[7]) | (A[7]^B[7])&~C[7];
   endfunction
 
 
@@ -22,7 +23,7 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
   end
   always @(A, B, scode, acode) begin
     neg_B = -B;
-    carry_out = 0;
+    //carry_out = 0;
     //$display("############# ALU ##############");
     //$display("################################");
     case(is_shift)

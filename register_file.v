@@ -19,8 +19,8 @@ module RegisterFile(input[2:0] reg_read_1, input [2:0] reg_read_2, input [2:0] r
     $display("");
   end */
 
-  always @(posedge clk) begin
-    if(reg_write_signal) begin
+  always @(posedge clk, in_data) begin
+    if(reg_write_signal & clk) begin
       registers[reg_write] = in_data;
     end
   end
