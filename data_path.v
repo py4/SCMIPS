@@ -1,6 +1,6 @@
 // take care of reg and wire, specially zero and carry and carry_out
 `timescale 1ns/1ns
-module DataPath(input reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_write_signal, stack_push, stack_pop, clk, input [1:0] pc_src, input [1:0] scode, input [2:0] acode, output zero, stack_overflow, output reg carry, output [18:0] instruction);
+module DataPath(input reg2_read_source, mem_read_write, mem_or_alu, input is_shift, input alu_src, update_z_c, reg_write_signal, stack_push, stack_pop, clk, input [1:0] pc_src, input [1:0] scode, input [2:0] acode, output zero, stack_overflow, output reg carry, output [18:0] instruction);
 
   reg start_loading_pc = 0;
   reg[11:0] pc = 12'b0;
@@ -42,7 +42,7 @@ module DataPath(input reg2_read_source, mem_read_write, mem_or_alu, is_shift, al
 
   RegisterFile register_file(instruction[10:8], reg2_read_source ? instruction[13:11] : instruction[7:5], instruction[13:11],reg_write_signal, clk, mem_or_alu ? alu_result : data_memory_out, reg_out_1, reg_out_2);
   
-  ALU alu(reg_out_1, (alu_src ? instruction[7:0] : (is_shift ? {5'b0,instruction[7:5]} : reg_out_2)), carry, is_shift, scode, acode, alu_result, zero, alu_carry_out);
+  ALU alu(reg_out_1, (alu_src ? instruction[7:0] : ( is_shift ? {5'b0,instruction[7:5]} : reg_out_2)), carry, is_shift, update_z_c, scode, acode, alu_result, zero, alu_carry_out);
 
   DataMemory data_memory(alu_result, reg_out_2, mem_read_write, clk, data_memory_out);
 

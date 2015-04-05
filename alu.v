@@ -5,7 +5,8 @@
 
 `timescale 1ns/1ns
 
-module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift, input [1:0] scode, input [2:0] acode, output reg [7:0] R, output reg zero, carry_out);
+module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, input is_shift, update_z_c, input [1:0] scode, input [2:0] acode, output reg [7:0] R, output reg zero, carry_out);
+
 
   function get_carry_out; input [7:0] A, B, C;
     //get_carry_out = (~(C[7]))&(A[7]^B[7]) | A[7]&B[7]&C[7];
@@ -31,19 +32,23 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
         case(acode)
           3'b000: begin
             temp = A + B;
-            carry_out = get_carry_out(A, B, temp);
+            if(update_z_c)
+              carry_out = get_carry_out(A, B, temp);
           end
           3'b001: begin
             temp = A + B + carry_in; 
-            carry_out = get_carry_out(A, B+carry_in, temp);
+            if(update_z_c)
+              carry_out = get_carry_out(A, B+carry_in, temp);
           end
           3'b010: begin
             temp = A + ~B + 1;
-            carry_out = get_carry_out(A, -B, temp);
+            if(update_z_c)
+              carry_out = get_carry_out(A, -B, temp);
           end
           3'b011: begin
             temp = A + ~B + 1 + carry_in;
-            carry_out = get_carry_out(A, -B + carry_in, temp);
+            if(update_z_c)
+              carry_out = get_carry_out(A, -B + carry_in, temp);
           end
 
           3'b100: temp = A & B;
@@ -80,6 +85,7 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, is_shift,
           endcase
         end
     endcase
-    zero = (R == 8'b0);
+    if(update_z_c)
+      zero = (R == 8'b0);
   end
 endmodule

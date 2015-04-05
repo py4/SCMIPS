@@ -1,15 +1,15 @@
 `timescale 1ns/1ns
-module Controller(input zero, carry, clk, input[18:0] instruction, output reg reg2_read_source, mem_read_write, mem_or_alu, is_shift, alu_src, reg_write_signal, stack_push, stack_pop, output reg [1:0] pc_src, output reg [1:0] scode, output reg [2:0] acode);
+module Controller(input zero, carry, clk, input[18:0] instruction, output reg reg2_read_source, mem_read_write, mem_or_alu, output reg  is_shift, output reg alu_src, update_z_c, reg_write_signal, stack_push, stack_pop, output reg [1:0] pc_src, output reg [1:0] scode, output reg [2:0] acode);
   
   initial begin
-    reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
+    update_z_c = 0; reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
     alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
   end
 
   always @(posedge clk, instruction) begin
     //#1;
-    reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0;
-    alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0;
+    reg2_read_source = 0; mem_read_write = 0; mem_or_alu = 0; is_shift = 0; alu_src = 0; reg_write_signal = 0; stack_push = 0; stack_pop = 0; pc_src = 2'b0; scode = 2'b0; acode = 3'b0; update_z_c = 0;
+
     $display(">>> alu src:  %d", alu_src);
     $display(">>> current instruction: %b", instruction);
     if(instruction == 19'b1111111111111111111) begin
@@ -19,7 +19,9 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
     if(instruction[18:17] == 2'b00) begin
       $display(">>> normal R type!");
       $display(">>> alu src:  %d", alu_src);
+      update_z_c = 1;
       acode = instruction[16:14];
+      is_shift = 0;
       alu_src = 0;
       mem_or_alu = 1;
       reg_write_signal = 1;
@@ -27,7 +29,9 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
     
     if(instruction[18:17] == 2'b01) begin
       $display(">>> immediate R type!");
+      update_z_c = 1;
       acode = instruction[16:14];
+      is_shift = 0;
       alu_src = 1;
       mem_or_alu = 1; //CHANGED
       reg_write_signal = 1;
@@ -39,6 +43,7 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
       is_shift = 1;
       mem_or_alu = 1;
       reg_write_signal = 1;
+      update_z_c = 1;
     end
 
     if(instruction[18:16] == 3'b100) begin
