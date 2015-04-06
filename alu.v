@@ -43,6 +43,7 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, input is_
           3'b010: begin
             temp = A + ~B + 1;
             if(update_z_c)
+              //carry_out = 
               carry_out = get_carry_out(A, -B, temp);
           end
           3'b011: begin

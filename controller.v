@@ -62,10 +62,10 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
     if(instruction[18:16] == 3'b101) begin
       $display(">>> beq");
       case(instruction[15:14])
-        2'b00: pc_src = zero == 1 ? 2'b1 : 2'b0;
-        2'b01: pc_src = zero == 0 ? 2'b1 : 2'b0;
-        2'b10: pc_src = carry == 1 ? 2'b1 : 2'b0;
-        2'b11: pc_src = carry == 0 ? 2'b1 : 2'b0;
+        2'b00: pc_src = (zero == 1 ? 2'b11 : 2'b00);
+        2'b01: pc_src = (zero == 0 ? 2'b11 : 2'b00);
+        2'b10: pc_src = (carry == 1 ? 2'b11 : 2'b00);
+        2'b11: pc_src = (carry == 0 ? 2'b11 : 2'b00);
       endcase
     end
 

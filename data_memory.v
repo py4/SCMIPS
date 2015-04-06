@@ -3,7 +3,7 @@ module DataMemory(input[7:0] address, input[7:0] write_data, input read_write, c
 
   reg[7:0] data[255:0];
 
-  always @(posedge clk, address, write_data) begin
+  always @(posedge clk) begin
     if(read_write & clk)
       data[address] = write_data;
   end
