@@ -7,6 +7,7 @@ module ALUTest;
   reg carry_in = 1, is_shift = 1, clk = 0;
   reg[1:0] scode = 2'b00;
   reg[2:0] acode = 3'b000;
+  reg update_z_c = 1;
 
   wire zero, carry_out;
   wire[7:0] R;
@@ -38,7 +39,7 @@ module ALUTest;
     end
   end
 
-  ALU alu(A, B, carry_in, is_shift, scode, acode, R, zero, carry_out);
+  ALU alu(A, B, carry_in, is_shift, update_z_c, scode, acode, R, zero, carry_out);
 
   always @(A, B, carry_in, scode, R, zero, carry_out) begin
     $display("");

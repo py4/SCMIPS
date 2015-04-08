@@ -33,7 +33,7 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
       acode = instruction[16:14];
       is_shift = 0;
       alu_src = 1;
-      mem_or_alu = 1; //CHANGED
+      mem_or_alu = 1;
       reg_write_signal = 1;
     end
 
