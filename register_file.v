@@ -4,14 +4,14 @@ module RegisterFile(input[2:0] reg_read_1, input [2:0] reg_read_2, input [2:0] r
   reg[7:0] registers[7:0];
   always @(posedge clk) begin
     if(reg_write_signal & clk) begin
-      registers[reg_write] = in_data;
+      registers[reg_write] <= in_data;
     end
   end
   
   always @(reg_read_1, reg_read_2) begin
-    out_data_1 = registers[reg_read_1];
-    out_data_2 = registers[reg_read_2];
-    registers[0] = 0; //$R0
+    out_data_1 <= registers[reg_read_1];
+    out_data_2 <= registers[reg_read_2];
+    registers[0] <= 0; //$R0
   end
   
   integer i;

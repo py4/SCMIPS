@@ -7,7 +7,7 @@ module InstructionMemory(input[11:0] address, output reg[18:0] instruction);
   end
 
   always @(address) begin
-    instruction = instructions[address];
+    instruction <= instructions[address];
   end
 endmodule
 

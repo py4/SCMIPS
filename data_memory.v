@@ -5,11 +5,11 @@ module DataMemory(input[7:0] address, input[7:0] write_data, input read_write, c
 
   always @(posedge clk) begin
     if(read_write & clk)
-      data[address] = write_data;
+      data[address] <= write_data;
   end
 
   always @(address, read_write) begin
-    if(read_write == 0) read_data = data[address];
+    if(read_write == 0) read_data <= data[address];
   end
 
   integer i;
