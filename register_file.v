@@ -8,10 +8,16 @@ module RegisterFile(input[2:0] reg_read_1, input [2:0] reg_read_2, input [2:0] r
     end
   end
   
+  initial begin
+    out_data_1 = registers[reg_read_1];
+    out_data_2 = registers[reg_read_2];
+    registers[0] = 0; //$R0
+  end
+  
   always @(reg_read_1, reg_read_2) begin
-    out_data_1 <= registers[reg_read_1];
-    out_data_2 <= registers[reg_read_2];
-    registers[0] <= 0; //$R0
+    out_data_1 = registers[reg_read_1];
+    out_data_2 = registers[reg_read_2];
+    registers[0] = 0; //$R0
   end
   
   integer i;

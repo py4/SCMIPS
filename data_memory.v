@@ -9,7 +9,7 @@ module DataMemory(input[7:0] address, input[7:0] write_data, input read_write, c
   end
 
   always @(address, read_write) begin
-    if(read_write == 0) read_data <= data[address];
+    if(read_write == 0) read_data = data[address];
   end
 
   integer i;

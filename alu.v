@@ -2,7 +2,6 @@
 
 module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, input is_shift, update_z_c, input [1:0] scode, input [2:0] acode, output reg [7:0] R, output reg zero, carry_out);
 
-
   function get_carry_out; input [7:0] A, B, C;
     get_carry_out = (A[7]&B[7]) | (A[7]^B[7])&~C[7];
   endfunction
@@ -23,22 +22,22 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, input is_
         case(acode)
           3'b000: begin
             temp = A + B;
-            if(update_z_c)
+            if(update_z_c == 1)
               carry_out = get_carry_out(A, B, temp);
           end
           3'b001: begin
             temp = A + B + carry_in; 
-            if(update_z_c)
+            if(update_z_c == 1)
               carry_out = get_carry_out(A, B+carry_in, temp);
           end
           3'b010: begin
             temp = A + ~B + 1;
-            if(update_z_c)
+            if(update_z_c == 1)
               carry_out = get_carry_out(A, -B, temp);
           end
           3'b011: begin
             temp = A + ~B + 1 - carry_in;
-            if(update_z_c)
+            if(update_z_c == 1)
               carry_out = get_carry_out(A, -B + carry_in, temp);
           end
 
@@ -75,7 +74,7 @@ module ALU(input signed [7:0] A, input signed [7:0] B, input carry_in, input is_
           endcase
         end
     endcase
-    if(update_z_c)
+    if(update_z_c == 1)
       zero = (R == 8'b0);
   end
 endmodule

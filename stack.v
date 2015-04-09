@@ -7,6 +7,13 @@ module Stack(input push_sig, pop_sig, clk, input[11:0] push_data, output reg ove
 
   reg[11:0] data[7:0];
   reg[3:0] stack_pointer = 4'b0;
+  
+  always @(stack_pointer) begin
+    if(stack_pointer != 4'b0) begin
+        pop_data = data[stack_pointer - 1];
+    end 
+  end
+  
   always @(posedge clk) begin
   //always @(posedge push_sig) begin
     if(push_sig) begin
@@ -18,10 +25,10 @@ module Stack(input push_sig, pop_sig, clk, input[11:0] push_data, output reg ove
       end
     end
   end
-  always @(posedge pop_sig) begin
-    if(clk) begin
+  always @(posedge clk) begin
+    if(pop_sig) begin
       if(stack_pointer != 4'b0) begin
-        pop_data <= data[stack_pointer - 1];
+        //pop_data <= data[stack_pointer - 1];
         stack_pointer <= stack_pointer - 1;
       end
     end

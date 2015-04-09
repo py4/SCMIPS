@@ -13,7 +13,7 @@ module Controller(input zero, carry, clk, input[18:0] instruction, output reg re
     $display(">>> alu src:  %d", alu_src);
     $display(">>> current instruction: %b", instruction);
     if(instruction == 19'b1111111111111111111) begin
-      #5 $finish;
+      #5 $stop;
     end
 
     if(instruction[18:17] == 2'b00) begin

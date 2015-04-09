@@ -9,7 +9,8 @@ module DataPath(input reg2_read_source, mem_read_write, mem_or_alu, input is_shi
   reg x; 
   
   always @(posedge clk) begin
-    carry <= alu_carry_out;
+    if (update_z_c==1) 
+      carry <= alu_carry_out;
       case(pc_src)
         2'b00: pc <= pc + 1;
         2'b01: pc <= instruction[11:0];
